@@ -66,81 +66,100 @@ module.exports = {
       }
     }
   },
-  // viewEdit: async (req, res) => {
-  //   try {
-  //     const { id } = req.params;
-  //     const category = await Category.findById(id);
+  viewEdit: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const nominal = await Nominal.findById(id);
 
-  //     res.render("admin/category/edit", {
-  //       category,
-  //     });
-  //   } catch (err) {
-  //     if (err.name === "ValidationError") {
-  //       const errMsg = Object.values(err.errors).map((val) => val);
-  //       req.flash("alertMessage", `${errMsg.join()}`);
-  //       req.flash("alertStatus", "danger");
-  //       res.redirect("/category");
-  //     } else {
-  //       req.flash("alertMessage", `${err.message}`);
-  //       req.flash("alertStatus", "danger");
-  //       res.redirect("/category");
-  //     }
-  //   }
-  // },
-  // actionEdit: async (req, res) => {
-  //   try {
-  //     const { id } = req.params;
-  //     const { name } = req.body;
-  //     if (!name) {
-  //       throw {
-  //         name: "ValidationError",
-  //         errors: {
-  //           message: "Name must be filled",
-  //         },
-  //       };
-  //     }
-  //     await Category.findByIdAndUpdate(id, {
-  //       name,
-  //     });
+      res.render("admin/nominal/edit", {
+        nominal,
+      });
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const errMsg = Object.values(err.errors).map((val) => val);
+        req.flash("alertMessage", `${errMsg.join()}`);
+        req.flash("alertStatus", "danger");
+        res.redirect("/nominal");
+      } else {
+        req.flash("alertMessage", `${err.message}`);
+        req.flash("alertStatus", "danger");
+        res.redirect("/nominal");
+      }
+    }
+  },
+  actionEdit: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { coinName, coinQty, coinPrice } = req.body;
 
-  //     req.flash("alertMessage", "Edit category has been success");
-  //     req.flash("alertStatus", "success");
+      console.log(coinQty, coinPrice, typeof coinQty);
 
-  //     res.redirect("/category");
-  //   } catch (err) {
-  //     if (err.name === "ValidationError") {
-  //       const errMsg = Object.values(err.errors).map((val) => val);
-  //       req.flash("alertMessage", `${errMsg.join()}`);
-  //       req.flash("alertStatus", "danger");
-  //       res.redirect("/category");
-  //     } else {
-  //       req.flash("alertMessage", `${err.message}`);
-  //       req.flash("alertStatus", "danger");
-  //       res.redirect("/category");
-  //     }
-  //   }
-  // },
-  // actonDelete: async (req, res) => {
-  //   try {
-  //     const { id } = req.params;
+      if (!coinName) {
+        throw {
+          name: "ValidationError",
+          errors: {
+            message: "Coin Name must be filled",
+          },
+        };
+      } else if (!coinQty || !Number(coinQty)) {
+        throw {
+          name: "ValidationError",
+          errors: {
+            message: "Coin Qty must be filled",
+          },
+        };
+      } else if (!coinPrice || !Number(coinPrice)) {
+        throw {
+          name: "ValidationError",
+          errors: {
+            message: "Coin Price must be filled",
+          },
+        };
+      }
+      await Nominal.findByIdAndUpdate(id, {
+        coinName,
+        coinQty,
+        coinPrice,
+      });
 
-  //     await Category.findByIdAndDelete(id);
+      req.flash("alertMessage", "Edit nominal has been success");
+      req.flash("alertStatus", "success");
 
-  //     req.flash("alertMessage", "Delete category has been success");
-  //     req.flash("alertStatus", "success");
+      res.redirect("/nominal");
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const errMsg = Object.values(err.errors).map((val) => val);
+        req.flash("alertMessage", `${errMsg.join()}`);
+        req.flash("alertStatus", "danger");
+        res.redirect("/nominal");
+      } else {
+        req.flash("alertMessage", `${err.message}`);
+        req.flash("alertStatus", "danger");
+        res.redirect("/nominal");
+      }
+    }
+  },
+  actonDelete: async (req, res) => {
+    try {
+      const { id } = req.params;
 
-  //     res.redirect("/category");
-  //   } catch (err) {
-  //     if (err.name === "ValidationError") {
-  //       const errMsg = Object.values(err.errors).map((val) => val);
-  //       req.flash("alertMessage", `${errMsg.join()}`);
-  //       req.flash("alertStatus", "danger");
-  //       res.redirect("/category");
-  //     } else {
-  //       req.flash("alertMessage", `${err.message}`);
-  //       req.flash("alertStatus", "danger");
-  //       res.redirect("/category");
-  //     }
-  //   }
-  // },
+      await Nominal.findByIdAndDelete(id);
+
+      req.flash("alertMessage", "Delete nominal has been success");
+      req.flash("alertStatus", "success");
+
+      res.redirect("/nominal");
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const errMsg = Object.values(err.errors).map((val) => val);
+        req.flash("alertMessage", `${errMsg.join()}`);
+        req.flash("alertStatus", "danger");
+        res.redirect("/nominal");
+      } else {
+        req.flash("alertMessage", `${err.message}`);
+        req.flash("alertStatus", "danger");
+        res.redirect("/nominal");
+      }
+    }
+  },
 };

@@ -9,10 +9,12 @@ const nominalSchema = Schema(
     coinQty: {
       type: Number,
       default: 0,
+      required: [true, "Coin Qty must be filled"],
     },
     coinPrice: {
       type: Number,
       default: 0,
+      required: [true, "Coin Price must be filled"],
     },
   },
   {
